@@ -60,7 +60,7 @@ namespace Sika {
         */
         SikaSinglyLinkedList(): HEAD(new SikaSinglyLinkedNode<T>()) {}
 
-        SikaSinglyLinkedList(SikaSinglyLinkedList& list) {
+        SikaSinglyLinkedList(const SikaSinglyLinkedList& list) {
             this->HEAD = new SikaSinglyLinkedNode<T>;
             auto sourceNode = list.HEAD;
             while (sourceNode->getNextNode() != nullptr) {

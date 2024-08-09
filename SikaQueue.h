@@ -3,7 +3,9 @@
 //
 #ifndef SIKAQUEUE_H
 #define SIKAQUEUE_H
+#include "SikaStack.h"
 
+#pragma message("Including SikaQueue.h")
 namespace Sika {
     /**
      * 动态队列, 需要属性 _head, _size, _front, _back

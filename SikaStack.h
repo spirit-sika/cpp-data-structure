@@ -5,6 +5,11 @@
 #ifndef SIKASTACK_H
 #define SIKASTACK_H
 #include <stdexcept>
+#ifdef __INCLUDE_LEVEL__
+#pragma message("Including SikaStack.h at level " STR(__INCLUDE_LEVEL__))
+#elif
+#pragma message("Including SikaStack.h at level ")
+#endif
 
 namespace Sika {
     /**
@@ -45,7 +50,7 @@ namespace Sika {
 
     /**
      * 动态栈, 使用链表的方式进行实现, 动态存储, 不需要做数组迁移
-     * 需要属性: size, top, buttom, ?HEAD?
+     * 需要属性: size, top, buttom, HEAD
      *
      * 初始化时给定一个头节点, 无任何数据类型, 压栈时链表头插, 栈顶指针根据新节点移动
      *
@@ -64,7 +69,9 @@ namespace Sika {
     class SikaDynamicStack final {
         int _size;
         SikaNode<T> *HEAD;
+        // 栈顶指针
         SikaNode<T> *top;
+        // 栈底指针
         SikaNode<T> *bottom;
 
         template<class E>
@@ -78,7 +85,7 @@ namespace Sika {
 
         ~SikaDynamicStack() {
             this->_size = 0;
-            // 析构时, 根据头节点便利整个链表进行内存释放
+            // 析构时, 根据头节点遍历整个链表进行内存释放
             while (HEAD->getNextNode() != nullptr) {
                 auto needFree = HEAD->getNextNode();
                 HEAD->setNextNode(HEAD->getNextNode()->getNextNode());
@@ -147,7 +154,7 @@ namespace Sika {
 
         const unsigned int lastComma = builder.find_last_of(", ");
         if (lastComma == builder.size() - 1) {
-            builder = builder.substr(0, lastComma-1);
+            builder = builder.substr(0, lastComma - 1);
         }
 
         builder.append("]");
@@ -155,6 +162,47 @@ namespace Sika {
         print << builder;
         return print;
     }
+
+    template<class T>
+    class StaticStack {
+    private:
+        T arr[];
+        int _index = 0;
+        int _size = 0;
+        int _max = 100;
+    public:
+        StaticStack() { arr = new T[_max]; };
+        /**
+         * 将数据推入到数组的末尾
+         * @param value 数据
+         */
+        void push(T value) {
+
+        }
+
+        /**
+         * 删除数组头部元素内容并返回
+         * @return 数据
+         */
+        T pop() {
+
+        }
+
+        int size() {}
+
+        /**
+         * 返回栈顶元素的内容但不删除
+         * @return 栈顶元素内容
+         */
+        T peek() {}
+
+        /**
+         * 判断栈是否为空
+         * @return 返回true当栈为空时
+         */
+        bool isEmpty() {}
+
+    };
 } // Sika
 
 #endif //SIKASTACK_H

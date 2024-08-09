@@ -3,7 +3,7 @@ project(SikaLinkedList)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(SikaLinkedList main.cpp
+add_executable(SikaLinkedList
         SikaLinkedList.h
         SikaSinglyLinkedList.h
         Person.h
@@ -11,4 +11,10 @@ add_executable(SikaLinkedList main.cpp
         SikaStack.h
         SikaQueue.h
         PointerAndReference.hpp
+        SikaTree.cpp
+        SikaTree.h
+        SikaBinaryTree.cpp
+        SikaBinaryTree.h
+        tree_by_gpt.cpp
+        main.cpp
 )

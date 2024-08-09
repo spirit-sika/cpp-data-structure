@@ -1,11 +1,14 @@
+#include <iostream>
+#include <vector>
+#include "PointerAndReference.hpp"
+#include "SikaQueue.h"
 #include "SikaSinglyLinkedList.h"
 #include "SikaStack.h"
-#include "SikaQueue.h"
-#include <iostream>
-#include "PointerAndReference.hpp"
-#include <vector>
 
+#include "SikaBinaryTree.h"
 #include "SikaQueue.h"
+#include "SikaBinaryTree.h"
+#include "tree_by_gpt.cpp"
 
 void testSikaSinglyLinkedList() {
     Sika::SikaSinglyLinkedList<int> intList;
@@ -65,7 +68,6 @@ void todoTestSikaQueue() {
     queue.push(2);
     queue.push(3);
 
-    // todo 死循环
     std::cout << "queue = " << queue << std::endl;
 
     std::cout << "queue.peek() is " << queue.peek() << std::endl;
@@ -73,6 +75,77 @@ void todoTestSikaQueue() {
     std::cout << "queue.size() is " << queue.size() << std::endl;
 
     std::cout << "queue = " << queue << std::endl;
+}
+
+template<typename T>
+void traveralsTree(Sika::SikaBinaryTree<T>* tree) {
+    std::cout << "please check the order of pre-order traversal: " << std::endl;
+    tree->prePrint();
+    std::cout << std::endl;
+    std::cout << "please check the order of mid-order traversal: " << std::endl;
+    tree->inPrint();
+    std::cout << std::endl;
+    std::cout << "please check the order of post-order traversal: " << std::endl;
+    tree->postPrint();
+    std::cout << std::endl;
+    std::cout << "please check the order of level-order traversal: " << std::endl;
+    tree->levelPrint();
+    std::cout << std::endl;
+}
+
+void fillTree(Sika::SikaBinaryTree<int>* integerTree) {
+    integerTree->assignNode(2);
+    integerTree->assignNode(3);
+    integerTree->assignNode(4);
+    integerTree->assignNode(5);
+    integerTree->assignNode(6);
+    integerTree->assignNode(7);
+    integerTree->assignNode(8);
+}
+void testSikaTree() {
+    Sika::SikaBinaryTree<int> tree;
+    tree.setRoot(5);
+    tree.assignNode(3);
+    tree.assignNode(7);
+    tree.assignNode(2);
+    tree.assignNode(4);
+    tree.assignNode(6);
+    tree.assignNode(8);
+
+    std::cout << "tree depth is: " << tree.getDepth() << std::endl;
+    std::cout << "tree is empty: " << ((tree.isEmpty() == true) ? "true" : "false") << std::endl;
+    std::cout << "root value is: " << tree.rootdata() << std::endl;
+    traveralsTree(&tree);
+
+    std::cout << "deleted left child! " << std::endl;
+    tree.deleteLeftChild();
+    std::cout << "tree depth is: " << tree.getDepth() << std::endl;
+    std::cout << "tree is empty: " << ((tree.isEmpty() == true) ? "true" : "false") << std::endl;
+    traveralsTree(&tree);
+
+    std::cout << "deleted right child! " << std::endl;
+    tree.deleteRightChild();
+    std::cout << "tree depth is: " << tree.getDepth() << std::endl;
+    std::cout << "tree is empty: " << ((tree.isEmpty() == true) ? "true" : "false") << std::endl;
+    traveralsTree(&tree);
+
+    std::cout << "clear tree! " << std::endl;
+    tree.clear();
+    std::cout << "tree depth is: " << tree.getDepth() << std::endl;
+    std::cout << "tree is empty: " << ((tree.isEmpty() == true) ? "true" : "false") << std::endl;
+    traveralsTree(&tree);
+
+    // todo 未处理树自旋, 导致单支树
+    fillTree(&tree);
+    std::cout << "fill tree! " << std::endl;
+    std::cout << "tree depth is: " << tree.getDepth() << std::endl;
+    std::cout << "tree is empty: " << ((tree.isEmpty() == true) ? "true" : "false") << std::endl;
+    traveralsTree(&tree);
+    tree.deleteChild();
+    std::cout << "delete child of tree! " << std::endl;
+    std::cout << "tree depth is: " << tree.getDepth() << std::endl;
+    std::cout << "tree is empty: " << ((tree.isEmpty() == true) ? "true" : "false") << std::endl;
+    traveralsTree(&tree);
 }
 
 //template<typename T>
@@ -104,166 +177,8 @@ public:
     }
 };
 
-/*/**
- * 链表节点
- #1#
-namespace Sika {
-    /*
-     * 节点类型
-     #1#
-    class LinkedNode {
-    // 对象所属的属性私有化, 再提供setter/getter
-    private:
-        int data;
-        LinkedNode* next;
-    public:
-        // get: 拿到
-        int getData(){
-            return this->data;
-        }
-        LinkedNode* getNext() {
-            return this->next;
-        }
-        // set: 设置
-        void setData(int data) {
-            this->data = data;
-        }
-        void setNext(LinkedNode* node) {
-            this->next = node;
-        }
-
-        /* 构造函数 #1#
-        // 空参构造
-        LinkedNode():data(0), next(nullptr) {}
-        // 全参构造
-        LinkedNode(int data, LinkedNode* next):data(data), next(next) {}
-        // 创建一个带数据, 没有下一个节点的节点
-        explicit LinkedNode(const int data):data(data), next(nullptr) {}
-        // 创建一个无数据, 但是有下一个节点的节点
-        explicit LinkedNode(LinkedNode* next):data(0), next(next){}
-
-        /* 析构函数 #1#
-        ~LinkedNode() = default;
-    };
-
-    class LinkedList {
-    private:
-        // 头节点
-        LinkedNode* HEAD;
-
-        /**
-         * 构造函数的目的就是初始话对象中的属性
-         #1#
-    public:
-        LinkedList():HEAD(new LinkedNode()) {}
-
-        explicit LinkedList(LinkedNode* next) {
-            HEAD = new LinkedNode();
-            HEAD->setNext(next);
-        }
-
-        ~LinkedList() {
-            /* 先备份节点,再切换下一个节点到下下个节点 #1#
-            LinkedNode* temp = HEAD;
-            while (temp->getNext() != nullptr) {
-                /*
-                 * 先保存一份下一个节点的备份,
-                 * 当前节点等于下一个节点的下一个节点,
-                 * 释放下一个节点的内存
-                 #1#
-                auto nextNode = temp->getNext();
-                temp->setNext(temp->getNext()->getNext());
-                delete nextNode;
-            }
-        }
-
-        void head_insert(const int data) const {
-            const auto node = new LinkedNode(data);
-            node->setNext(HEAD->getNext());
-            HEAD->setNext(node);
-        }
-
-        void tail_insert(const int data) const {
-            /* 创建一个头节点的备份, 将该备份遍历到最后一个节点(下一个节点为空则到链表末尾) #1#
-            auto node = HEAD;
-            while (node->getNext()!=nullptr) {
-                node = node->getNext();
-            }
-            node->setNext(new LinkedNode(data));
-        }
-
-        int delete_by_index(const int index) {}
-
-        int delete_by_data(const int data) {}
-
-        bool update_by_index(int index, int newData) {}
-
-        /**
-         * 根据数据修改, 只修改第一个符合条件的节点,
-         * 不保证整个中符合的节点都被修改
-         * @param data
-         * @param newData
-         * @return
-         #1#
-        bool update_by_data(int data, int newData) {}
-
-        /**
-         *
-         * @param data 数据内容
-         * @return 返回查找到的第一个节点的索引
-         #1#
-        int search_by_data(int data) {}
-
-        /**
-         * 根据索引位置进行查找, 索引不符合链表抛出异常
-         * @param index 节点索引
-         * @return 返回查找到的元素内容
-         * @throw 输入的索引为负数, 超过链表长度
-         #1#
-        int search_by_index(int index) {}
-
-        int size() {}
-        int length() {}
-
-
-    };
-    std::ostream& operator<<(std::ostream& out, LinkedList& list) {
-
-    }
-}*/
-
-
-
 int main() {
-
-    int a = 10, b = 20;
-    int& ref1 = a;
-    int& ref2 = b;
-
-    int& rref1 = ref1;
-    int& rref2 = ref2;
-
-    swap(rref1, rref2);
-    std::cout << "a = " << a << ", b = " << b << std::endl;
-
-    func<int>();
-
-    std::vector<int> v;
-
+    testSikaStack();
+    // todoTestSikaQueue();
     return 0;
 }
-
-// list (head=[0, e],e=[5,d], d=[4, a], a=[1, b], b=[2, c], c=[3, nullptr])
-
-/*
- * 插入
- * 删除
- * 修改
- * 查看
- *
- * 插入: 头插   尾插  中间插入
- * 删除: 根据位置删除(返回值), 根据值删除(返回索引)
- * 修改: 根据位置将节点的data修改
- * 查看: 根据位置查找节点(给出的是节点的值T)    打印整个链表
- * 获取链表大小: size()    length()
- */
